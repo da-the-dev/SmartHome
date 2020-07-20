@@ -1,0 +1,15 @@
+{
+    "name": "smarthome",
+    "version": "0.0.1",
+    "main": "server.py",
+    "scripts": {
+        "test": "Change my IP (192.168.2.218) to the IP of your PC => Launch 'server.js' => Follow the IP in console."
+    },
+    "author": "da_dev",
+    "license": "ISC",
+    "dependencies": {
+        "jquery": "^3.5.1",
+        "ws": "^7.3.1"
+    },
+    "description": "A system to control stuff in my room."
+}
