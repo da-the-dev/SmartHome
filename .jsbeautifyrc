@@ -1,15 +1,12 @@
 {
-    "html": {
-        "eol": "\n",
-        "indent_with_tabs": true,
-        "max_preserve_newlines": 10,
-        "indent_inner_html": true,
-        "preserve_newlines": true,
-        "extra_liners": []
-    },
-    "css": {
-        "newline_between_rules": true,
-        "preserve_newlines": true,
-        "selector_separator_newline": false
-    }
+	"indent_with_tabs": true,
+	"html": {
+		"indent_inner_html": true,
+		"extra_liners": [],
+		"wrap_attributes": "preserve"
+	},
+
+	"js": {
+		"operator_position": "after-newline"
+	}
 }

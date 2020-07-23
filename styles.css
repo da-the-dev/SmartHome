@@ -1,90 +1,91 @@
 @font-face {
-    font-family: "Pixel";
-    src: url("fonts/pixelfont.ttf");
+	font-family: "Pixel";
+	src: url("fonts/pixelfont.ttf");
 }
 
 body {
-    background-color: black;
-    color: white;
-    background: url("images/hacking.gif");
+	background-color: black;
+	color: white;
+	background: url("images/hacking.gif");
+	font-family: "Pixel";
 }
 
 .header {
-    background-color: black;
-    color: white;
-    top: 0;
+	background-color: black;
+	color: white;
+	top: 0;
 }
 
 .pixel {
-    font-family: "Pixel";
-    font-size: 30px;
+	font-family: "Pixel";
+	font-size: 30px;
 }
 
 .label {
-    color: white;
-    font-weight: 24px;
+	color: white;
+	font-weight: 24px;
 }
 
 .btn-regular {
-    color: white;
-    background-color: blue;
-    border-color: blue;
-    font-size: 24px;
+	color: white;
+	background-color: blue;
+	border-color: blue;
+	font-size: 24px;
 
-    height: 100px;
-    width: 150px;
+	height: 100px;
+	width: 150px;
 }
 
 .btn-regular:active {
-    color: black;
-    background-color: lime;
-    border-color: lime;
-    font-size: 24px;
+	color: black;
+	background-color: lime;
+	border-color: lime;
+	font-size: 24px;
 
-    height: 100px;
-    width: 150px;
+	height: 100px;
+	width: 150px;
 
-    margin-top: -0.5em;
+	margin-top: -0.5em;
 }
 
 .btn-inversed {
-    color: black;
-    background-color: lime;
-    border-color: lime;
-    font-size: 24px;
+	color: black;
+	background-color: lime;
+	border-color: lime;
+	font-size: 24px;
 
-    height: 100px;
-    width: 150px;
+	height: 100px;
+	width: 150px;
 
-    margin-top: -0.5em;
+	margin-top: -0.5em;
 }
 
 .status {
-    color: white;
-    font-size: 24px;
-    white-space: pre-line;
-    background-color: blue;
-    height: 100px;
-    width: 150px;
-    padding: 0 1em 0 1em;
+	color: white;
+	font-size: 24px;
+	white-space: pre-line;
+	background-color: blue;
+	height: 100px;
+	width: 150px;
+	padding: 0 1em 0 1em;
 
-    /* Text vertical align */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	/* Text vertical align */
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .big-status {
-    color: white;
-    font-size: 48px;
-    white-space: pre-line;
-    background-color: blue;
-    height: 100px;
-    width: 150px;
-    padding: 0 1em 0 1em;
+	color: white;
+	font-size: 48px;
+	white-space: pre-line;
+	background-color: blue;
+	height: 100px;
+	width: 150px;
+	padding: 0 1em 0 1em;
 
-    /* Text vertical align */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	/* Text vertical align */
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
