@@ -3,6 +3,9 @@ const app = express()
 const server = require('http').createServer(app)
 const WebSocket = require('ws')
 
+const host = "192.168.2.218"
+const port = 8080
+
 let wss = new WebSocket.Server({ server: server })
 
 var temp = 22
@@ -28,11 +31,19 @@ wss.on('connection', (ws) => {
             })
             wss.close()
         }
-    })
 
-    setInterval(sendTemp, 1000, wss)
+        if(message.startsWith("$temp")) {
+            var data = parseInt(message.substring(5))
+            wss.clients.forEach(c => {
+                if(c != ws && ws.readyState == WebSocket.OPEN)
+                    c.send(`$website ${data}`)
+            })
+        }
+
+        console.log("[Server] Message: " + message);
+    })
 })
 
 app.get('/', (req, res) => { })
 
-server.listen(3000, () => console.log("[Server] Listening on port: 3000"))
+server.listen(port, host, () => console.log(`[Server] Listening on ${host}/${port}/`))
