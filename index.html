@@ -62,7 +62,10 @@
 	</body>
 	<!-- <script src="scripts/client.js"></script> -->
 	<script>
-		const socket = new WebSocket("ws://localhost:3000")
+		const host = "192.168.2.218"
+		const port = 8080
+
+		const socket = new WebSocket(`ws://${host}:${port}`)
 
 		socket.addEventListener('open', (event) => {
 			$('#server-status').text("Статус сервера: ONLINE")
@@ -71,8 +74,8 @@
 
 		socket.addEventListener('message', (event) => {
 			var msg = event.data
-			if (msg.startsWith("$temp")) {
-				$("#temp-status").text(msg.substring(6) + "C")
+			if (msg.startsWith("$website")) {
+				$("#temp-status").text(msg.substring(8) + "C")
 			}
 		})
 	</script>
