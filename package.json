@@ -1,16 +1,17 @@
 {
-    "name": "smarthome",
-    "version": "0.0.1",
-    "main": "server.py",
-    "scripts": {
-        "test": "Change my IP (192.168.2.218) to the IP of your PC => Launch 'server.js' => Follow the IP in console."
-    },
-    "author": "da_dev",
-    "license": "ISC",
-    "dependencies": {
-        "express": "^4.17.1",
-        "jquery": "^3.5.1",
-        "ws": "^7.3.1"
-    },
-    "description": "A system to control stuff in my room."
+	"name": "smarthome",
+	"version": "0.0.1",
+	"main": "server.py",
+	"scripts": {
+		"wss": "node server.js",
+		"website": "node website.js"
+	},
+	"author": "da_dev",
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.17.1",
+		"jquery": "^3.5.1",
+		"ws": "^7.3.1"
+	},
+	"description": "A system to controll stuff in my room."
 }
