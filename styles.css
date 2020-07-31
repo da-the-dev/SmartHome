@@ -8,6 +8,7 @@ body {
 	color: white;
 	background: url("images/hacking.gif");
 	font-family: "Pixel";
+	min-height: 1200px;
 }
 
 .header {
@@ -88,4 +89,34 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+.astatus {
+	position: fixed;
+	width: 250px;
+	color: white;
+	text-align: right;
+	background-color: black;
+	bottom: 0;
+	right: 0;
+}
+
+.li {
+	font-size: 18px;
+	text-align: right;
+	padding-left: 10px;
+	min-width: 150px;
+}
+
+.liс {
+	font-size: 18px;
+	text-align: center;
+}
+
+.red {
+	color: red;
+}
+
+.green {
+	color: lime;
 }
