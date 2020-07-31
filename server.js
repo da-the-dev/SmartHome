@@ -13,6 +13,8 @@ let wss = new WebSocket.Server({ server: server })
 
 wss.on('connection', (ws) => {
     ws.on('message', (message) => {
+        // console.log("[Server] Message: " + message)
+
         if(message === "close") {
             wss.clients.forEach(c => {
                 c.close()
@@ -26,7 +28,7 @@ wss.on('connection', (ws) => {
         })
 
         if(message === "ALC")
-            console.log("[Server] Arduino Light Connected!")
+            console.log("[Server] Arduino Light Connected!");
     })
 })
 

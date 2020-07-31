@@ -41,8 +41,9 @@
 				<!-- Light -->
 				<div class="col-lg-3">
 					<h1 class="label">Свет</h1>
-					<h1 class="status mx-auto" id="light-status">Статус:
-						ВКЛ</h1>
+					<button class="btn-regular" id="light-status">
+						ВКЛ/ВЫКЛ
+					</button>
 				</div>
 
 				<!-- Temperature -->
@@ -60,23 +61,38 @@
 			</div>
 
 	</body>
-	<!-- <script src="scripts/client.js"></script> -->
 	<script>
-		const host = "192.168.2.218"
-		const port = 8080
+		let adress = window.location.href
+		let host = adress.substring(7, adress.indexOf(":3000"))
+		let port = 8080
 
-		const socket = new WebSocket(`ws://${host}:${port}`)
+		$(document).ready(() => {
+			const socket = new WebSocket(`ws://${host}:${port}`)
 
-		socket.addEventListener('open', (event) => {
-			$('#server-status').text("Статус сервера: ONLINE")
-			console.log("[Client] Connected to WS server");
-		})
+			// Switch lights
+			$("#light-status").click(() => {
+				socket.send("$light")
+			})
 
-		socket.addEventListener('message', (event) => {
-			var msg = event.data
-			if (msg.startsWith("$website")) {
-				$("#temp-status").text(msg.substring(8) + "C")
-			}
+			var lightStatus = false;
+
+			socket.addEventListener('open', (event) => {
+				$('#server-status').text("Статус сервера: ONLINE")
+				console.log("[Client] Connected to WS server");
+			})
+
+			// WebSocket recieved
+			socket.addEventListener('message', (event) => {
+				var msg = event.data
+				if (msg === "$light click on")
+					$("#light-status").html("<h1>ВКЛ</h1>/ВЫКЛ")
+				if (msg === "$light click off")
+					$("#light-status").html("ВКЛ/<h1>ВЫКЛ</h1>")
+
+				// if (msg.startsWith("$light sensor")) {
+				// 	$("#light-status").text(`Статус:\n${msg.substring(10)}`)
+				// }
+			})
 		})
 	</script>
 </html>
