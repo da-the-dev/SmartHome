@@ -1,46 +1,28 @@
-function readFile(file) {
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", file, false);
-    rawFile.onreadystatechange = function() {
-        if(rawFile.readyState === 4) {
-            if(rawFile.status === 200 || rawFile.status == 0) {
-                return rawFile.responseText
-            }
-        }
-    }
-    rawFile.send(null);
-}
+let adress = window.location.href
+let host = adress.substring(7, adress.indexOf(":3000"))
+let port = 8080
 
-const settings = JSON.parse(readFile(`settings_t.json`))
-const host = settings.host
-const port = settings.port
+$(document).ready(() => {
+    const socket = new WebSocket(`ws://${host}:${port}`)
 
+    // Switch lights
+    $("#light-status").click(() => {
+        socket.send("$light")
+    })
 
+    var lightStatus = false;
 
-const socket = new WebSocket(`ws://${host}:${port}`)
+    socket.addEventListener('open', (event) => {
+        $('#server-status').text("Статус сервера: ONLINE")
+        console.log("[Client] Connected to WS server");
+    })
 
-var lightStatus = false;
-
-socket.addEventListener('open', (event) => {
-    $('#server-status').text("Статус сервера: ONLINE")
-    console.log("[Client] Connected to WS server");
+    // WebSocket recieved
+    socket.addEventListener('message', (event) => {
+        var msg = event.data
+        if(msg === "$light click on")
+            $("#light-status").html("<h1>ВКЛ</h1>/ВЫКЛ")
+        if(msg === "$light click off")
+            $("#light-status").html("ВКЛ/<h1>ВЫКЛ</h1>")
+    })
 })
-
-// WebSocket recieved
-socket.addEventListener('message', (event) => {
-    var msg = event.data
-    if(msg.startsWith("$light")) {
-        $("#light-status").text(`Статус:\n${msg.substring(7)}`)
-    }
-})
-
-// Switch lights
-var switchLight = () => {
-    if(lightStatus) {
-        socket.send(`$light off`)
-        lightStatus = !lightStatus
-    } else {
-        socket.send(`$light on`)
-        lightStatus = !lightStatus
-    }
-}
