@@ -23,7 +23,7 @@
 		<!-- Header -->
 		<div class="container-fluid header">
 			<h1 class="text-center pt-2">Управление умным домом</h1>
-			<h2 class="text-center pb-4" id="server-status">Статус сервера: OFFLINE</h2>
+			<h2 class="text-center pb-4" id="server-status">Статус сервера: <span class="red">OFFLINE</span></h2>
 		</div>
 
 		<!-- Main body -->
@@ -69,7 +69,7 @@
 					<p class="li">Жалюзи:</p>
 				</div>
 				<div class="col-6">
-					<p class="liс green">ONLINE</p>
+					<p class="liс green" id="ablinds">ONLINE</p>
 				</div>
 			</div>
 			<div class="row">
@@ -77,7 +77,7 @@
 					<p class="li">Свет:</p>
 				</div>
 				<div class="col-6">
-					<p class="liс red">OFFLINE</p>
+					<p class="liс red" id="alight">OFFLINE</p>
 				</div>
 			</div>
 			<div class="row">
@@ -85,7 +85,7 @@
 					<p class="li">Температура:</p>
 				</div>
 				<div class="col-6">
-					<p class="liс red">OFFLINE</p>
+					<p class="liс red" id="atemp">OFFLINE</p>
 				</div>
 			</div>
 			<div class="row">
@@ -93,10 +93,10 @@
 					<p class="li">Кондиционер:</p>
 				</div>
 				<div class="col-6">
-					<p class="liс red">OFFLINE</p>
+					<p class="liс red" id="acond">OFFLINE</p>
 				</div>
 			</div>
 		</div>
 	</body>
-	<script src="scripts/client.js"></script>>
+	<script src="scripts/client.js"></script>
 </html>
