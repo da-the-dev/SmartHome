@@ -2,27 +2,35 @@ let adress = window.location.href
 let host = adress.substring(7, adress.indexOf(":3000"))
 let port = 8080
 
+/**@type {WebSocket} */
+var socket = null
+
+var connect = () => {
+    socket = new WebSocket(`ws://${host}:${port}`)
+}
+
 $(document).ready(() => {
-    const socket = new WebSocket(`ws://${host}:${port}`)
+    var reconnect = () => {
+        if(!socket) {
+            connect()
+        }
+        socket.addEventListener('open', (event) => {
+            $('#server-status').html(`Статус сервера: <span class="green">ONLINE</span>`)
+            console.log("[Client] Connected to WS server");
+        })
 
-    // Switch lights
-    $("#light-status").click(() => {
-        socket.send("$light")
-    })
+        // WebSocket recieved
+        socket.addEventListener('message', (event) => {
 
-    var lightStatus = false;
+        })
 
-    socket.addEventListener('open', (event) => {
-        $('#server-status').text("Статус сервера: ONLINE")
-        console.log("[Client] Connected to WS server");
-    })
+        socket.addEventListener('close', () => {
+            $('#server-status').html(`Статус сервера: <span class="red">OFFLINE</span>`)
+            console.log("[Client] Lost connection to WS server");
+            socket = null
+        })
+    }
 
-    // WebSocket recieved
-    socket.addEventListener('message', (event) => {
-        var msg = event.data
-        if(msg === "$light click on")
-            $("#light-status").html("<h1>ВКЛ</h1>/ВЫКЛ")
-        if(msg === "$light click off")
-            $("#light-status").html("ВКЛ/<h1>ВЫКЛ</h1>")
-    })
+    setInterval(reconnect, 5000)
 })
+
