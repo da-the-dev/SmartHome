@@ -98,5 +98,99 @@
 			</div>
 		</div>
 	</body>
-	<script src="scripts/client.js"></script>
+	<!-- <script src="scripts/client.js"></script> -->
+	<script>
+		let adress = window.location.href
+		// let host = adress.substring(7, adress.indexOf(":3001"))
+		// let port = 8080
+		let host = "192.168.2.218"
+		let port = 8080
+
+		/**@type {WebSocket} */
+		var socket
+
+		$(document).ready(() => {
+			const socketMessageListener = (event) => {
+				// Analyzing the message
+				/**@type {string} */
+				var msg = event.data
+
+				if (msg.startsWith("!ard")) { // Got info only about 1 Arduino
+					var arduinoData = JSON.parse(msg.slice(4))
+
+					var arduinoInfo = $(`#a${arduinoData.name}`)
+					if (arduinoData.connected) {
+						arduinoInfo.removeClass('red')
+						arduinoInfo.addClass('green')
+						arduinoInfo.text('ONLINE')
+					} else {
+						arduinoInfo.removeClass('green')
+						arduinoInfo.addClass('red')
+						arduinoInfo.text('OFFLINE')
+					}
+					try {
+						$(`#${arduinoData.name}-status`).html("ВКЛ/ВЫКЛ")
+					} catch {}
+					try {
+						$(`#${arduinoData.name}-value`).text('-')
+					} catch {}
+				}
+
+				if (msg.startsWith("!arr")) {
+					msg = msg.slice(4)
+					console.log(msg)
+					var arduinoData = new Array(JSON.parse(msg))
+					arduinoData[0].forEach(ard => {
+						var ardInfo = $(`#a${ard.name}`)
+						if (ard.connected) {
+							ardInfo.text("ONLINE")
+							ardInfo.addClass("green")
+							ardInfo.removeClass("red")
+
+							if (ard.status != "") {
+								if (ard.status)
+									$(`#${ard.name}-status`).html("<h1>ВКЛ</h1>/ВЫКЛ")
+								else
+									$(`#${ard.name}-status`).html("ВКЛ/<h1>ВЫКЛ</h1>")
+							} else {
+								$(`#${ard.name}-status`).html("ВКЛ/ВЫКЛ")
+							}
+
+							if (ard.value != "")
+								$(`#${ard.name}-value`).text(ard.value)
+							else
+								$(`#${ard.name}-value`).text('-')
+						}
+					})
+				}
+
+			}
+
+			// Open
+			const socketOpenListener = (event) => {
+				$('#server-status').html('Статус сервера: <span class="green">ONLINE</span>')
+				console.log('[Client] Connected to WS server');
+				socket.send('%');
+			};
+
+			// Closed
+			const socketCloseListener = (event) => {
+				$('#server-status').html('Статус сервера: <span class="red">OFFLINE</span>')
+				if (socket) {
+					console.error('Disconnected.');
+				}
+				try {
+					socket = new WebSocket(`ws://${host}:${port}`);
+					socket.addEventListener('open', socketOpenListener);
+					socket.addEventListener('message', socketMessageListener);
+					socket.addEventListener('close', socketCloseListener);
+				} catch (e) {}
+			}
+			socketCloseListener();
+
+			$("#light-status").click(() => {
+				socket.send("light")
+			})
+		})
+	</script>
 </html>

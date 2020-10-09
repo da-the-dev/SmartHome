@@ -11,57 +11,96 @@ const port = 8080
 // Clients and arduinos 
 /**@type {Array<WebSocket>} */
 var clients = new Array()
-/**@type {Map<WebSocket, any>} */
-var arduinos = new Map()
+/**@type {Array<object>} */
+var arduinos = new Array()
 
 // Start the server
 let wss = new WebSocket.Server({ server: server })
 
 wss.on('connection', (ws) => {
+    console.log("connection") // DEBUG
     ws.on('message', msg => {
-        // Client connected. End here, no msg is transmitted
-        if(msg === "%") {
-            console.log(`[Server] Client connected! Client count: ${wss.clients.size}`)
+        // Analyzing the message
+        // Handling connections
+        if(msg === "%") { // That means that a client has connected
+            console.log("[Server] Client connected")
             clients.push(ws)
+            // ws.addEventListener("close", () => { // Add an event listener if client disconnects
+            //     clients = clients.filter((value, index, array) => {
+            //         if(value != ws)
+            //             return value
+            //     })
+            // })
+            ws.send("!arr" + JSON.stringify(arduinos))
+            console.log("[DEBUG] Sent to the client: " + "!arr" + JSON.stringify(arduinos))
             return
-        }
-
-        // Message broadcast
-        if(clients.includes(ws)) // If client sent a msg
-            arduinos.forEach(a => { // Send it to all arduinos
-                a.self.send(msg)
-            })
-
-
-        clients.forEach(c => { // Send it to all clients
-            c.send(msg)
-        })
-
-
-        // Arduino connected
-        if(!arduinos.has(ws)) {
-            console.log(`[Server] Arduino connected! Client count: ${wss.clients.size}`)
-            arduinos.set(ws, {
-                "self": ws,
+        } else if(msg.startsWith("$")) {
+            var name = msg.slice(1)
+            arduinos.push({
+                "name": msg.slice(1),
                 "connected": true,
-                "status": "none",
-                "value": "none"
+                "value": "",
+                "status": ""
+            })
+            ws.addEventListener('close', () => { // Delete from array in case of close event
+                clients.forEach(c => {
+                    c.send('!ard' + JSON.stringify({
+                        "name": msg.slice(1),
+                        "connected": false,
+                        "value": "none",
+                        "status": "none"
+                    }))
+                })
+                arduinos = arduinos.filter((value, index, array) => {
+                    if(value != ws)
+                        return value
+                })
+            })
+            clients.forEach(c => { // Send information about the Arduino to clients
+                c.send('!ard' + JSON.stringify({
+                    "name": msg.slice(1),
+                    "connected": true,
+                    "value": "",
+                    "status": ""
+                }))
             })
             return
         }
 
-        /**@type {Array<string>} */
-        const args = msg.split(" ")
-        const name = args.shift()
+        // // Handling Arduino commands
+        // var args = msg.split(" ")
+        // var name = args.shift()
 
-        var data = arduinos.get(ws)
-        if(!isNaN(args[0])) { // If recieved a number, it's a value
-            data.value = args[0]
-            arduinos.set(ws, data)
-        } else if(args[0]) { // If recieved a string, it's a status
-            data.status = args[0]
-            arduinos.set(ws, data)
-        }
+        // if(args[0] == "on") {
+        //     var data = {
+        //         "name": name,
+        //         "status": "on"
+        //     }
+        //     data = JSON.stringify(data)
+
+        //     clients.forEach(c => {
+        //         c.send(data)
+        //     })
+        // } else if(args[0] == "off") {
+        //     var data = {
+        //         "name": name,
+        //         "status": "on"
+        //     }
+        //     data = JSON.stringify(data)
+
+        //     clients.forEach(c => {
+        //         c.send(data)
+        //     })
+        // } else if(!isNaN(args[0])) {
+        //     var data = {
+        //         "name": name,
+        //         "value": parseInt(args[0])
+        //     }
+        //     data = JSON.stringify(data)
+        //     clients.forEach(c => {
+        //         c.send(data)
+        //     })
+        // }
     })
 
     ws.onclose = () => {
